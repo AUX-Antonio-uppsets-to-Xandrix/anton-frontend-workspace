@@ -14,7 +14,7 @@ const ImageUploader=()=> {
     const { noImage, tempImageURL, setTempImageURL, tempImage, setTempImage, 
         originalImageURL, setOriginalImageURL } = imageContext;
 
-const loadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+const loadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
   const file = e.target.files?.[0]; //typescript 문법. nullcheck 후 null 일시 undefined 할당
   if (file) {
     
@@ -25,20 +25,28 @@ const loadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
       //fileReader.readAsDataURL(file);
     
       const serverForm = new FormData();
-      serverForm.append("file",file);
-      uploadFile(serverForm)
+      serverForm.append("file",file);/*
+      const responseForm = await uploadFile(serverForm)
         .then((responseForm)=>{
             //setTempImage(responseForm.file);      
             console.log("server file saved and loaded successfully");
             //const imageUrl = URL.createObjectURL(serverFile);
             try{
-              const tempUrl = responseForm.get("filePath") as string
-              setTempImageURL(;
+              const tempUrl = responseForm.get("filePath") as string;
+              setTempImageURL(tempUrl);
+            }
+            catch{
+              console.log("tempUrl allocation err!");
             }
         })
         .catch(err=>{
           console.log("uploadFile err! ",err);
         })
+          
+        const tempUrl = responseForm.get("filePath") as string;*/
+        const tempUrl = await uploadFile(serverForm);
+        if(tempUrl !== null)
+          setTempImageURL("/"+tempUrl);
     
   }
   else return;
