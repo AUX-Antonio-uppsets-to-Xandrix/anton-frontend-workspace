@@ -29,7 +29,7 @@ export async function uploadFile(formData: FormData) {
     // server code 의 js에서 public 폴더 접근 : public/images/1.jpg
     // client code 의 return html 에서 img src 접근 : images/1.jpg
     revalidatePath("/");
-    return filePath.toString(); 
+    return filePath.toString();
     //따라서 return 은 images/1.jpg로
   }
     else {throw new Error('file return failed from server');

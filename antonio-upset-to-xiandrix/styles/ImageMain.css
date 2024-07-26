@@ -1,0 +1,36 @@
+.imageMain{
+    width:1000px;
+    height: 90vh;
+    position: relative;
+    margin-top:20px;
+    left:25%;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* 원하는 간격으로 조절 */
+}
+
+.imageMain img{
+    margin-top: 10px;
+    border: 2px solid silver;
+    border-radius: 5px;
+    padding : 15px;
+}
+
+.image-display-field {
+    width:600px;
+    height:600px;
+}
+
+.image-manipulation-container{
+    display: block;
+    flex-direction: column;
+    margin-top: 20px
+}
+.image-manipulation-bar{
+    border: 2px solid #333;
+    padding: 10px;
+}
+canvas{
+    display: block;
+}

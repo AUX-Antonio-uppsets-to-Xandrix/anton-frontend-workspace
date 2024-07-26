@@ -46,6 +46,7 @@ const ImageWithFilter: React.FC = () => {
           if (isGray) {
             ctx.filter = 'grayscale(100%)'; // 그레이스케일 필터 적용
             ctx.drawImage(img, 0, 0); // 이미지를 다시 캔버스에 그림
+            ctx.
           }
 
           const link = document.createElement('a'); // 새로운 링크 요소 생성

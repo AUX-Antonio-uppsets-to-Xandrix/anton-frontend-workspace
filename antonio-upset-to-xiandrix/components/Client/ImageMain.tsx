@@ -1,10 +1,12 @@
 "use client"
 import React, { useState, useEffect, useContext } from "react";
 import ImageDisplayContext from "./ImageDisplayContext";
-import '../../styles/ImageViewer.css'
+
 import ImageViewer from "./ImageViewer";
 import ImageDownloader from "./ImageDownloader";
 import ImageUploader from "./ImageUploader";
+import ImageManipulator from "./ImageManipulator";
+import { OpenCvProvider } from "opencv-react-ts";
 
 const ImageMain = () => {
     const noImage = "/noimage.png";
@@ -12,16 +14,23 @@ const ImageMain = () => {
     const [tempImageURL, setTempImageURL] = useState<string|ArrayBuffer|null>(noImage);
     const [tempImage, setTempImage] = useState<File | null>(null);
     const [originalImageURL, setOriginalImageURL] = useState<string|ArrayBuffer|null>(noImage);
-
+    const [imageWorkingSet,setImageWorkingSet] = useState<ImageManipulationType|null>({
+        grayscale:0,
+        brightness:50
+    });
 
     return (
         <ImageDisplayContext.Provider value={{
-            noImage, tempImageURL, setTempImageURL, tempImage, setTempImage, originalImageURL, setOriginalImageURL
+            noImage, tempImageURL, setTempImageURL, tempImage, setTempImage, originalImageURL, setOriginalImageURL,
+            imageWorkingSet, setImageWorkingSet
         }}>
-            <div className='imageViewer'>
-                {/* <ImageDownloader />*/}
+            <div className='imageMain'>
+                <ImageDownloader />
                 <ImageUploader />
-                <ImageViewer />
+                <OpenCvProvider>
+                    <ImageViewer />
+                </OpenCvProvider>
+                <ImageManipulator/>
             </div>
         </ImageDisplayContext.Provider>
     )

@@ -17,37 +17,18 @@ const ImageUploader=()=> {
 const loadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
   const file = e.target.files?.[0]; //typescript 문법. nullcheck 후 null 일시 undefined 할당
   if (file) {
-    
       const fileReader = new FileReader();
       fileReader.onload=()=>{
         setOriginalImageURL(fileReader.result);
       }
-      //fileReader.readAsDataURL(file);
-    
+      fileReader.readAsDataURL(file); //Original File에 접근할 수 있는 URL 제공
+      
       const serverForm = new FormData();
-      serverForm.append("file",file);/*
-      const responseForm = await uploadFile(serverForm)
-        .then((responseForm)=>{
-            //setTempImage(responseForm.file);      
-            console.log("server file saved and loaded successfully");
-            //const imageUrl = URL.createObjectURL(serverFile);
-            try{
-              const tempUrl = responseForm.get("filePath") as string;
-              setTempImageURL(tempUrl);
-            }
-            catch{
-              console.log("tempUrl allocation err!");
-            }
-        })
-        .catch(err=>{
-          console.log("uploadFile err! ",err);
-        })
-          
-        const tempUrl = responseForm.get("filePath") as string;*/
-        const tempUrl = await uploadFile(serverForm);
+      serverForm.append("file",file);
+
+        const tempUrl = await uploadFile(serverForm); //서버에서는 접근 할 수 있는 file 경로가 넘어온다.
         if(tempUrl !== null)
-          setTempImageURL("/"+tempUrl);
-    
+          setTempImageURL("/"+tempUrl); //서버에 저장되는 TempImageURL 제공
   }
   else return;
 };
