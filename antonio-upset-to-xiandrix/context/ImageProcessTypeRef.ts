@@ -1,4 +1,4 @@
-type ImageManipulationType = {grayscale:number;brightness:number }
+type ImageManipulationType = {grayscale:number;brightness:number;threshold:number }
 
 interface ImageDisplayContextType {
     noImage: string;

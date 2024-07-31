@@ -16,6 +16,7 @@ const ImageMain = () => {
     const [originalImageURL, setOriginalImageURL] = useState<string|ArrayBuffer|null>(noImage);
     const [imageWorkingSet,setImageWorkingSet] = useState<ImageManipulationType|null>({
         grayscale:0,
+        threshold:50,
         brightness:50
     });
 

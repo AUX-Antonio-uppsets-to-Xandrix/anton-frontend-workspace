@@ -2,6 +2,8 @@
 import React,{useState,useEffect,useRef, useContext} from 'react'
 import Image from 'next/image';
 import ImageDisplayContext from './ImageDisplayContext';
+import isEqual from 'lodash/isEqual';
+import { Mat } from 'opencv-react-ts';
 //import cv from '@techstark/opencv-js';
 //import { OpenCvProvider, useOpenCv } from 'opencv-react-ts';
 //import useUpdateEffect from '@/context/useUpdateEffect';
@@ -13,27 +15,45 @@ import ImageDisplayContext from './ImageDisplayContext';
     - 이미지 디스플레이 :
     - (2차) 이미지 디스플레이 내 마우스 I/O 따라 이동, 확대/축소
 */
+
+
+
 const ImageViewer:React.FC = () =>{
     const imageContext = useContext(ImageDisplayContext) as ImageDisplayContextType;
     const changedImage = useRef<HTMLCanvasElement>(null);
     const [isLoaded,setIsLoaded] = useState(false);
-    //var cv = require('opencv.js');
-    //const cv = require('opencv-react-ts');
-    /*
+    const prevImage = useRef();
+/*
     if(!imageContext){
         alert("imageContext 불러오기 에러 발생!");
         console.log("ImageViewer err");
         return;
     }*/
     const { noImage,tempImageURL,originalImageURL,imageWorkingSet} = imageContext;
-   
+   /*
     useEffect(()=>{
-        if(originalImageURL && changedImage.current)
+        
+        if(originalImageURL && changedImage.current){
+            
             ImageDrawer();
+        }
         else
             return;
     },[imageWorkingSet?.grayscale]);
+*/
+function useCustomHook( obj: ImageManipulationType |null) {
+    const prevObjRef = useRef();
+  
+    useEffect(() => {
+      if (!isEqual(prevObjRef.current, obj)) {
+        console.log('obj가 바뀌었을 때만 이 console.log가 실행됩니다.');
+        ImageDrawer();
+        prevObjRef.current = obj as any;
+      }
+    }, [obj]);
+  }
 
+    useCustomHook(imageWorkingSet);
 
     const ImageDrawer=() => {
         if (originalImageURL && changedImage.current) {
@@ -41,22 +61,30 @@ const ImageViewer:React.FC = () =>{
             imgElement.src = originalImageURL as string;
 
             imgElement.onload = () => {
-
+                try{
                 const grayscale = Number(imageWorkingSet?.grayscale);
+                const threshold = Number(imageWorkingSet?.threshold);
 
-                const img = cv.imread(imgElement);
+                const img = cv.imread(imgElement as HTMLElement);
                 const dst = new cv.Mat(img.rows,img.cols,img.type());
                 
                 let low = new cv.Mat(img.rows, img.cols, img.type(), [0, 0, 0, 0]);
                 //let high = new cv.Mat(img.rows, img.cols, img.type(), [150, 150, 150, 255]);
-                let high = new cv.Mat(img.rows, img.cols, img.type(), [grayscale*2.5, grayscale*2.5, 255, 255]);
+                let high = new cv.Mat(img.rows, img.cols, img.type(), [grayscale*5, 255, 255, 255]);
                 //cv.cvtColor(img, imgGray, cv.COLOR_RGBA2GRAY); //순서대로 입력영상, 출력영상, 변환형식
-                cv.inRange(img,low,high,dst)
+                cv.inRange(img,low,high,dst);
+                
+                cv.threshold(dst,dst,threshold*2.5,threshold*2.5,cv.THRESH_OTSU);
+                //dst.resize(600);
                 cv.imshow(changedImage.current as HTMLElement, dst);
                 setIsLoaded(true);
                 img.delete();
                 low.delete(); high.delete();
                 dst.delete();
+                }
+                catch{
+                    console.log("err found on opencv load");
+                }
             };
         }
     };
