@@ -13,11 +13,12 @@ const ImageMain = () => {
 
     const [tempImageURL, setTempImageURL] = useState<string|ArrayBuffer|null>(noImage);
     const [tempImage, setTempImage] = useState<File | null>(null);
-    const [originalImageURL, setOriginalImageURL] = useState<string|ArrayBuffer|null>(noImage);
+    const [originalImageURL, setOriginalImageURL] = useState<string|ArrayBuffer|null>(null);
     const [imageWorkingSet,setImageWorkingSet] = useState<ImageManipulationType|null>({
         grayscale:0,
-        threshold:50,
-        brightness:50
+        threshold:0,
+        brightness:50,
+        stateChanged:0
     });
 
     return (

@@ -12,7 +12,7 @@ const ImageUploader=()=> {
         return;
     }
     const { noImage, tempImageURL, setTempImageURL, tempImage, setTempImage, 
-        originalImageURL, setOriginalImageURL } = imageContext;
+        originalImageURL, setOriginalImageURL,imageWorkingSet,setImageWorkingSet } = imageContext;
 
 const loadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
   const file = e.target.files?.[0]; //typescript 문법. nullcheck 후 null 일시 undefined 할당
@@ -20,6 +20,11 @@ const loadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
       const fileReader = new FileReader();
       fileReader.onload=()=>{
         setOriginalImageURL(fileReader.result);
+        if(imageWorkingSet)
+          setImageWorkingSet({
+            ...imageWorkingSet,
+            stateChanged: Number(e.target.value)
+        });
       }
       fileReader.readAsDataURL(file); //Original File에 접근할 수 있는 URL 제공
       

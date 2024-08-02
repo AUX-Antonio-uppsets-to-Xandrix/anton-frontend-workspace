@@ -33,4 +33,5 @@
 }
 canvas{
     display: block;
+    border:solid 2px #333;
 }
