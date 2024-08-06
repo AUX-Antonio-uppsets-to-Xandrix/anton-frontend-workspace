@@ -1,8 +1,8 @@
 .imageMain{
     width:1000px;
-    height: 90vh;
+    height: 100vh;
     position: relative;
-    margin-top:20px;
+    margin-top:5vh;
     left:25%;
     justify-content: center;
     display: flex;
@@ -25,11 +25,10 @@
 .image-manipulation-container{
     display: block;
     flex-direction: column;
-    margin-top: 20px
 }
 .image-manipulation-bar{
     border: 2px solid #333;
-    padding: 10px;
+    padding: 5px;
 }
 canvas{
     display: block;

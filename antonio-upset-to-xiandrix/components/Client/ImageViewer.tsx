@@ -18,15 +18,13 @@ import { Mat } from 'opencv-react-ts';
 
 const ImageViewer: React.FC = () => {
     const imageContext = useContext(ImageDisplayContext) as ImageDisplayContextType;
-    const changedImage = useRef<HTMLCanvasElement>(null);
-    const [isLoaded, setIsLoaded] = useState(false); 
-    const prevImage = useRef();
-    const { noImage, tempImageURL, originalImageURL, imageWorkingSet } = imageContext;
+    const { noImage, tempImageURL, originalImageURL, imageWorkingSet,displayCanvas } = imageContext;
 
     function useCustomHook(obj: ImageManipulationType | null) {
         const prevObjRef = useRef();
         useEffect(() => {
             if (!isEqual(prevObjRef.current, obj)) {
+                //isEqual : lodash 라이브러리 제공 함수. 객체간 키-값 깊은 비교
                 console.log('obj가 바뀌었을 때만 이 console.log가 실행됩니다.');
                 ImageDrawer();
                 prevObjRef.current = obj as any;
@@ -40,12 +38,12 @@ const ImageViewer: React.FC = () => {
 
 
     const ImageDrawer = () => {
-        if (originalImageURL && changedImage.current) {
+        if (originalImageURL && displayCanvas.current && imageWorkingSet) {
             const imgElement = document.createElement('img');
             imgElement.src = originalImageURL as string;
 
             imgElement.onload = () => {
-                const canvas = changedImage.current;
+                const canvas = displayCanvas.current;
                 if (canvas) {
                     canvas.width = imgElement.width;
                     canvas.height = imgElement.height;
@@ -89,11 +87,24 @@ const ImageViewer: React.FC = () => {
                     }
                     //cv.threshold 지정
                     const src = cv.imread(canvas);
+                    const sizeRatio = canvas.width/canvas.height;
+
                     const dst = new cv.Mat();
-                    cv.threshold(src, dst, threshold * 2.5, 255, cv.THRESH_TOZERO);
-                    
-                    cv.imshow(changedImage.current, dst);
-                    setIsLoaded(true);
+                    let dSize = new cv.Size(450*sizeRatio,450);
+                    cv.resize(src,dst,dSize,0,0,cv.INTER_AREA);
+                    //cv.pyrDown(src,dst,new cv.Size(0,0),cv.BORDER_DEFAULT)
+
+                    cv.threshold(dst, dst, threshold * 2.5, 255, cv.THRESH_TOZERO);
+                    //threshold 란 : 픽셀의 RGB값들에 대해 특정 기준에 대한 '문턱값' 처리를 수행
+                    //문턱값이 진해질 수록 어두운 색상이 강조된다.
+                    //THRESH_TOZERO : 픽셀 값이 경계값을 넘으면 유지, 아니면 0
+
+                    for(let i=0;i<imageWorkingSet.rotation;i++){
+                        console.log("imageWorkingSet : ",imageWorkingSet);
+                        cv.rotate(dst,dst,cv.ROTATE_90_CLOCKWISE);
+                    }
+                    cv.imshow(displayCanvas.current, dst);
+
                     src.delete();
                     //low.delete(); high.delete();
                     dst.delete();
@@ -124,7 +135,7 @@ const ImageViewer: React.FC = () => {
             {originalImageURL ?
                 <div className='canvas-container'>
                     {/*<Image alt="loadedImage" src={originalImageURL?.toString()} width={400} height={400} className="imageArea" />*/}
-                    <canvas width={600} height={600} ref={changedImage} />
+                    <canvas width={600} height={600} ref={displayCanvas as React.RefObject<HTMLCanvasElement>} />
                 </div>
                  :
                 <Image src={noImage} alt="no-image" width={400} height={400} className='imageArea' />

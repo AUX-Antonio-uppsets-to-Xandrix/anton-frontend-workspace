@@ -1,5 +1,6 @@
 import React,{useState,useEffect,useContext} from "react";
 import ImageDisplayContext from "./ImageDisplayContext";
+import { blob } from "stream/consumers";
 
 const ImageDownloader=()=>{
     const imageContext = useContext(ImageDisplayContext);
@@ -8,8 +9,8 @@ const ImageDownloader=()=>{
         console.log("ImageViewer err");
         return;
     }
-    const { noImage, tempImageURL, setTempImageURL, tempImage, setTempImage, 
-        originalImageURL, setOriginalImageURL } = imageContext;
+    const { noImage, tempImageURL, displayCanvas,  
+        originalImageURL, setOriginalImageURL,imageWorkingSet } = imageContext;
 
 
     const exportImage = () => {
@@ -23,7 +24,26 @@ const ImageDownloader=()=>{
         4) (Client) response success 가 넘어올 때 까지 fetch 에 대해 await 한다.
         5) (Client) response success 넘어올 시 원래 갖고 있던 경로에 download를 수행한다.
         */
+        
+        
+        if(!displayCanvas.current)
+            return;
+        displayCanvas.current.toBlob((blobImg)=>{
+            if(blobImg){
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blobImg);
+                var arSplitUrl=tempImageURL?.toString().split("/");
+                if(arSplitUrl!==undefined){ 
+                    var nArLength=arSplitUrl.length;
+                    var arFileName=arSplitUrl[nArLength-1];
+                    link.download = arFileName;
+                }
+                link.click();
+            }
+        })
 
+
+        /*
         const link = document.createElement('a');
         link.href = tempImageURL as string;
         link.download = 'temp-image-notfound.png';
@@ -34,6 +54,7 @@ const ImageDownloader=()=>{
             link.download = arFileName;
         }
         link.click();
+        */
     };
 
 

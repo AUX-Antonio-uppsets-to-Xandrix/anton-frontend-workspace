@@ -11,7 +11,7 @@ const ImageUploader=()=> {
         console.log("ImageViewer err");
         return;
     }
-    const { noImage, tempImageURL, setTempImageURL, tempImage, setTempImage, 
+    const { noImage, tempImageURL, setTempImageURL,
         originalImageURL, setOriginalImageURL,imageWorkingSet,setImageWorkingSet } = imageContext;
 
 const loadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,11 +23,11 @@ const loadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if(imageWorkingSet)
           setImageWorkingSet({
             ...imageWorkingSet,
-            stateChanged: Number(e.target.value)
+            stateChanged: Number(imageWorkingSet.stateChanged+1)
         });
       }
       fileReader.readAsDataURL(file); //Original File에 접근할 수 있는 URL 제공
-      
+
       const serverForm = new FormData();
       serverForm.append("file",file);
 
