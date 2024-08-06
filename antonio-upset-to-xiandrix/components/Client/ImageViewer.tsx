@@ -130,12 +130,10 @@ const ImageViewer: React.FC = () => {
     useCustomHook(imageWorkingSet);
     return (
         <div className='image-display-field'>
-            <h1>{imageWorkingSet?.grayscale}</h1>
-
             {originalImageURL ?
                 <div className='canvas-container'>
                     {/*<Image alt="loadedImage" src={originalImageURL?.toString()} width={400} height={400} className="imageArea" />*/}
-                    <canvas width={600} height={600} ref={displayCanvas as React.RefObject<HTMLCanvasElement>} />
+                    <canvas width={300} height={300} ref={displayCanvas as React.RefObject<HTMLCanvasElement>} />
                 </div>
                  :
                 <Image src={noImage} alt="no-image" width={400} height={400} className='imageArea' />

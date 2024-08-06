@@ -2,7 +2,7 @@
     width:1000px;
     height: 100vh;
     position: relative;
-    margin-top:5vh;
+    margin-top:1vh;
     left:25%;
     justify-content: center;
     display: flex;
@@ -18,8 +18,8 @@
 }
 
 .image-display-field {
-    width:600px;
-    height:600px;
+    width:400px;
+    height:450px;
 }
 
 .image-manipulation-container{

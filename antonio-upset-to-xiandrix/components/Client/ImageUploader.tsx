@@ -23,7 +23,8 @@ const loadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if(imageWorkingSet)
           setImageWorkingSet({
             ...imageWorkingSet,
-            stateChanged: Number(imageWorkingSet.stateChanged+1)
+            stateChanged: Number(imageWorkingSet.stateChanged+1),
+            rotation:0
         });
       }
       fileReader.readAsDataURL(file); //Original File에 접근할 수 있는 URL 제공
