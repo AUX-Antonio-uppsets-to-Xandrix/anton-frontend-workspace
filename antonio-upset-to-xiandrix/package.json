@@ -10,12 +10,14 @@
   },
   "dependencies": {
     "@techstark/opencv-js": "^4.9.0-release.3",
+    "axios": "^1.7.4",
     "lodash": "^4.17.21",
     "next": "14.2.5",
     "opencv-react": "^0.0.6",
     "opencv-react-ts": "^0.0.11",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-router-dom": "^6.26.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.7",

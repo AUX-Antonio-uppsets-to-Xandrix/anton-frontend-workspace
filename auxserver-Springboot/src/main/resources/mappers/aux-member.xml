@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.temp.mapper.AuxMemberMapper">
+	<select id="loginAuxMember" resultType="com.temp.dto.AuxMember">
+		SELECT * FROM aux_member
+		WHERE auxmember_id = #{auxmemberId}
+		AND auxmember_password =
+		#{auxmemberPassword}
+	</select>
+
+	<insert id="insertAuxMember"
+		parameterType="com.temp.dto.AuxMember">
+		INSERT INTO aux_member (auxmember_id,auxmember_password)
+		VALUES (#{auxmemberId},#{auxmemberPassword})
+	</insert>
+
+	<update id="updateAuxMember"
+		parameterType="com.temp.dto.AuxMember">
+		UPDATE aux_member
+		SET
+		auxworkingset_grayscale=#{auxworkingsetGrayscale},
+		auxworkingset_threshold=#{auxworkingsetThreshold},
+		auxworkingset_brightness=#{auxworkingsetBrightness},
+		auxworkingset_rotation=#{auxworkingsetRotation},
+		auxmember_imageurl = #{auxmemberImageurl}
+		WHERE auxmember_id = #{auxmemberId}
+	</update>
+
+</mapper>        

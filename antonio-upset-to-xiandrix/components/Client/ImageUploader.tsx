@@ -1,19 +1,23 @@
 "use client"
-import React,{useContext} from "react";
+import React,{useContext, useEffect} from "react";
 import { uploadFile } from "../Server/Uploadfile"
 import ImageDisplayContext from "./ImageDisplayContext";
 
 const ImageUploader=()=> {
 
-    const imageContext = useContext(ImageDisplayContext);
-    if(!imageContext){
-        alert("imageContext 불러오기 에러 발생!");
-        console.log("ImageViewer err");
-        return;
-    }
-    const { noImage, tempImageURL, setTempImageURL,
+  const imageContext = useContext(ImageDisplayContext) as ImageDisplayContextType;
+  const { noImage, tempImageURL, setTempImageURL,
         originalImageURL, setOriginalImageURL,imageWorkingSet,setImageWorkingSet } = imageContext;
 
+
+
+
+
+
+/*
+LoadImage : 사용자가 이미지를 불러오는 순간 서버에 이미지를 업로드한다.
+서버 파일시스템에 업로드 된 이미지는 DB에 그 경로가 저장된다.
+*/
 const loadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
   const file = e.target.files?.[0]; //typescript 문법. nullcheck 후 null 일시 undefined 할당
   if (file) {
@@ -41,7 +45,7 @@ const loadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
 
     return (
       <div className="imageUploader-container">
-        <label htmlFor='loadImageInput' className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700">이미지 불러오기</label>
+        <label htmlFor='loadImageInput' >이미지 불러오기</label>
         <input type='file' accept='image/*' id='loadImageInput' onChange={loadImage} style={{display:'none'}} />
       </div>
     );

@@ -34,3 +34,7 @@
 # typescript
 **/*.tsbuildinfo
 **/next-env.d.ts
+/.metadata/
+
+**/.zip
+**/images/

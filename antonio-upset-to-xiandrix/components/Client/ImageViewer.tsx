@@ -5,7 +5,7 @@ import ImageDisplayContext from './ImageDisplayContext';
 import isEqual from 'lodash/isEqual';
 import { Mat } from 'opencv-react-ts';
 //import cv from '@techstark/opencv-js';
-//import { OpenCvProvider, useOpenCv } from 'opencv-react-ts';
+//import cv from 'opencv-react-ts';
 //import useUpdateEffect from '@/context/useUpdateEffect';
 /*
     ImageViewer 컴포넌트에서는 다음과 같은 기능을 담당한다.
@@ -18,8 +18,8 @@ import { Mat } from 'opencv-react-ts';
 
 const ImageViewer: React.FC = () => {
     const imageContext = useContext(ImageDisplayContext) as ImageDisplayContextType;
-    const { noImage, tempImageURL, originalImageURL, imageWorkingSet,displayCanvas } = imageContext;
-
+    const { noImage, tempImageURL, originalImageURL, setImageWorkingSet,imageWorkingSet,displayCanvas,masterCanvas } = imageContext;
+    const [loading,setLoading] = useState(true);
     function useCustomHook(obj: ImageManipulationType | null) {
         const prevObjRef = useRef();
         useEffect(() => {
@@ -29,22 +29,20 @@ const ImageViewer: React.FC = () => {
                 ImageDrawer();
                 prevObjRef.current = obj as any;
             }
-        }, [obj]);
+        }, [obj,originalImageURL]);
     }
 
-    const grayScaleDrawer = () => {
-
-    }
 
 
     const ImageDrawer = () => {
+        
         if (originalImageURL && displayCanvas.current && imageWorkingSet) {
             const imgElement = document.createElement('img');
             imgElement.src = originalImageURL as string;
 
             imgElement.onload = () => {
                 const canvas = displayCanvas.current;
-                if (canvas) {
+                if (canvas && originalImageURL !=="/noimage.png" && originalImageURL !=="http://localhost:3000/noimage.png") {
                     canvas.width = imgElement.width;
                     canvas.height = imgElement.height;
                     const ctx = canvas.getContext('2d');
@@ -57,9 +55,9 @@ const ImageViewer: React.FC = () => {
                     const threshold = Number(imageWorkingSet?.threshold);
                     const brightness = Number(imageWorkingSet?.brightness);
                     //cv.cvtColor(src, src, cv.COLOR_RGBA2GRAY, 0);
-                    
                     //cv.픽셀 RGB 값 변경 > grayscale 조정 / brightness 조정
                     const imagePixelData = ctx?.getImageData(0,0,canvas.width,canvas.height);
+                    console.log(imagePixelData);
                     const pixelData = imagePixelData?.data;
                     if(pixelData&& imagePixelData){
                     for(let i=0;i<Number(pixelData?.length);i+=4){
@@ -86,6 +84,7 @@ const ImageViewer: React.FC = () => {
                     ctx?.putImageData(imagePixelData,0,0);
                     }
                     //cv.threshold 지정
+                    console.log("캔버스는 두구두구",canvas);
                     const src = cv.imread(canvas);
                     const sizeRatio = canvas.width/canvas.height;
 
@@ -104,15 +103,23 @@ const ImageViewer: React.FC = () => {
                         cv.rotate(dst,dst,cv.ROTATE_90_CLOCKWISE);
                     }
                     cv.imshow(displayCanvas.current, dst);
-
+                    setLoading(false);   
                     src.delete();
                     //low.delete(); high.delete();
                     dst.delete();
+                     
+                }
+                    catch(error){
+                        console.log("opencv err!",error);
+                        //const src = cv.imread(canvas);
+                        //const sizeRatio = canvas.width/canvas.height;
+                        //cv.resize(cv.imread(displayCanvas.current), new cv.Mat(),new cv.Size(450*sizeRatio,450),0,0,cv.INTER_AREA);
+                        setImageWorkingSet({
+                            ...imageWorkingSet,
+                            stateChanged: imageWorkingSet.stateChanged+1
+                        });
+                        setLoading(false)
                     }
-                    catch{
-                        console.log("opencv err!");
-                    }
-
                 }
             };
         }
@@ -124,19 +131,20 @@ const ImageViewer: React.FC = () => {
     */
     //: React.ChangeEvent<HTMLInputElement 는 이벤트 객체의 타입 명시.(TypeScript)
     // 코드 안정성을 높이고 컴파일 에러 발견 가능
-
     //여기부터 실제 코드가 실행되는 영역
 
     useCustomHook(imageWorkingSet);
+    ImageDrawer();
     return (
         <div className='image-display-field'>
-            {originalImageURL ?
+            {originalImageURL && originalImageURL!=='http://localhost:3000/noimage.png' && originalImageURL!=='/noimage.png'?
                 <div className='canvas-container'>
                     {/*<Image alt="loadedImage" src={originalImageURL?.toString()} width={400} height={400} className="imageArea" />*/}
-                    <canvas width={300} height={300} ref={displayCanvas as React.RefObject<HTMLCanvasElement>} />
+                    <canvas ref={displayCanvas as React.RefObject<HTMLCanvasElement>} />
+                    <canvas ref={masterCanvas as React.RefObject<HTMLCanvasElement>} style={{display:'none'}}/>
                 </div>
                  :
-                <Image src={noImage} alt="no-image" width={400} height={400} className='imageArea' />
+                <Image src='/loading.png' alt="no-image" width={400} height={400} className='imageArea' />
             }
 
         </div>
