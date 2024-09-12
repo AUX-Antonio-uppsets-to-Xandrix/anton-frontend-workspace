@@ -8,12 +8,6 @@ const ImageUploader=()=> {
   const imageContext = useContext(ImageDisplayContext) as ImageDisplayContextType;
   const { noImage, tempImageURL, setTempImageURL,
         originalImageURL, setOriginalImageURL,imageWorkingSet,setImageWorkingSet } = imageContext;
-
-
-
-
-
-
 /*
 LoadImage : 사용자가 이미지를 불러오는 순간 서버에 이미지를 업로드한다.
 서버 파일시스템에 업로드 된 이미지는 DB에 그 경로가 저장된다.

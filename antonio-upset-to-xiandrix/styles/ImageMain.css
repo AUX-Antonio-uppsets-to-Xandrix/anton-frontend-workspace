@@ -10,6 +10,18 @@
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
   }
+
+  footer{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+  }
   
   .header-container {
     display: flex;
@@ -17,7 +29,15 @@
     width: 100%;
     margin-bottom: 20px;
   }
-  
+  .logo-left{
+    display: flex;
+    justify-content:left;
+    position: absolute;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-right: 20px;
+    z-index: 2;
+  }
   .action-buttons-right {
     display: flex;
     justify-content: flex-end;
@@ -362,7 +382,10 @@
     font-weight: normal;
     font-style: normal;
   }
-  
-  .fontDunggeunmo{
+
+ * {
     font-family: 'NeoDunggeunmo';
+  }
+  .signupLabel:hover{
+    cursor: pointer;
   }

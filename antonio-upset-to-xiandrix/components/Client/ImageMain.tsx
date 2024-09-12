@@ -54,11 +54,14 @@ const ImageMain = () => {
                     try {
                         const url = getImageFromServer(serverUserDTO.auxmemberImageurl as string);
                         if (url) {
-                            setUserInfo(prevState => ({
+                          /*  setUserInfo(prevState => ({
                                 ...prevState,
                                 userImageURL: url as string
-                            } as UserType));
+                            } as UserType));*/
                             setOriginalImageURL(url);
+                            const match = (url as string ).match(/\/images\/\d+\.(jpg|png|gif|jpeg)/);
+                            setTempImageURL(serverUserDTO.auxmemberImageurl);
+                            console.log("match  :",match);
                             console.log("userInfo set: ", userInfo);
                         } else {
                             alert('Failed to fetch image URL');
@@ -81,13 +84,15 @@ const ImageMain = () => {
     }
 
     const saveStatus = async () => {
-        console.log("saving userInfo : ", userInfo);
+        
         setUserInfo({
             ...userInfo,
             userImageURL: tempImageURL,
             userWorkingSet: JSON.stringify(imageWorkingSet)
         } as unknown as UserType);
-
+        console.log("saving userInfo : ", userInfo);
+        console.log("saving temp url : ",tempImageURL);
+        
         try {
             const response = await axios.put('http://localhost:8888/api/update',
                 {
@@ -109,8 +114,7 @@ const ImageMain = () => {
 
 
 
-    const handleLogout = async () => {
-        const ss = await saveStatus();
+    const handleLogout = () => {
         console.log('로그아웃전에', userInfo);
         setInputId('');
         setInputPwd('');
@@ -124,7 +128,7 @@ const ImageMain = () => {
         if (savedMember) {
             setUserInfo(JSON.parse(savedMember));
         }
-        else if(userInfo){
+        else if (userInfo) {
             localStorage.setItem("loginUser", JSON.stringify(userInfo));
         }
         console.log("local 저장 : ", localStorage.getItem("loginUser"));
@@ -139,6 +143,9 @@ const ImageMain = () => {
             {(userInfo) ?
                 <div className="image-main-container">
                     <div className="header-container">
+                        <div className="logo-left">
+                            <img src="/logo.png" className="w-80" />
+                        </div>
                         <div className="action-buttons-right">
                             <button className="logout-button" onClick={handleLogout}>
                                 로그아웃하기

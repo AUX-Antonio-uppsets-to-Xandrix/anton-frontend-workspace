@@ -29,7 +29,7 @@ const ImageViewer: React.FC = () => {
                 ImageDrawer();
                 prevObjRef.current = obj as any;
             }
-        }, [obj,originalImageURL]);
+        }, [obj]);
     }
 
 
@@ -42,6 +42,7 @@ const ImageViewer: React.FC = () => {
 
             imgElement.onload = () => {
                 const canvas = displayCanvas.current;
+                console.log("origin URL : ",originalImageURL);
                 if (canvas && originalImageURL !=="/noimage.png" && originalImageURL !=="http://localhost:3000/noimage.png") {
                     canvas.width = imgElement.width;
                     canvas.height = imgElement.height;
@@ -137,7 +138,7 @@ const ImageViewer: React.FC = () => {
     ImageDrawer();
     return (
         <div className='image-display-field'>
-            {originalImageURL && originalImageURL!=='http://localhost:3000/noimage.png' && originalImageURL!=='/noimage.png'?
+            {originalImageURL?
                 <div className='canvas-container'>
                     {/*<Image alt="loadedImage" src={originalImageURL?.toString()} width={400} height={400} className="imageArea" />*/}
                     <canvas ref={displayCanvas as React.RefObject<HTMLCanvasElement>} />

@@ -54,12 +54,12 @@ const ImageManipulator = () => {
     return (
         <div className="controls-container">
             <div className="control-buttons">
-                <button type="button" onClick={toOriginalImage}>Reset</button>
-                <button type="button" onClick={rotateImage}>Rotate</button>
+                <button type="button" onClick={toOriginalImage}>원래대로</button>
+                <button type="button" onClick={rotateImage}>90도 회전</button>
             </div>
 
             <div className="slider-container">
-                <label htmlFor="grayscale-range">Grayscale</label>
+                <label htmlFor="grayscale-range" className="text-xl">흑백화</label>
                 <input
                     id="grayscale-range"
                     type="range"
@@ -72,7 +72,7 @@ const ImageManipulator = () => {
             </div>
 
             <div className="slider-container">
-                <label htmlFor="threshold-range">Threshold</label>
+                <label htmlFor="threshold-range" className="text-xl">고대비 효과</label>
                 <input
                     id="threshold-range"
                     type="range"
@@ -85,7 +85,7 @@ const ImageManipulator = () => {
             </div>
 
             <div className="slider-container">
-                <label htmlFor="brightness-range">Brightness</label>
+                <label htmlFor="brightness-range" className="text-xl">밝기</label>
                 <input
                     id="brightness-range"
                     type="range"
